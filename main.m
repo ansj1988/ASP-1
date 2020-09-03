@@ -22,7 +22,7 @@
 %% Step 1: loading variables and configuring the tool
 
 clear
-% close all
+close all
 clc
 
 % Examples of input signals:
@@ -37,23 +37,18 @@ clc
 % s12_lab and noise_floor: original lab measurements
 % s12_lab_10xemi and noise_floor_10xemi: original measurements with artificially increased noise
 
-% input = 1;
-% if input == 1
-%     load('directional_patch_antenna.mat'); 
-% elseif input == 2
-%     load('omni_patch_antenna.mat');        
-% elseif input == 3
-%     load('horn_antenna') 
-% end
-load('omni.mat'); % dae
-s12_lab_10xemi = s12_lea;
-s12_chamber = s12_camara;
+input = 1;
+if input == 1
+    load('directional_patch_antenna.mat'); 
+elseif input == 2
+    load('omni_patch_antenna.mat');        
+elseif input == 3
+    load('horn_antenna') 
+end
 
 ifft_size = 5000;
-% signal = ifftshift(ifft(s12_lab_10xemi,ifft_size,'symmetric'))';
-% noise = ifftshift(ifft(noise_floor_10xemi,ifft_size,'symmetric'))';
-signal = ifftshift(ifft(s12_lea,ifft_size,'symmetric'))';
-noise = ifftshift(ifft(ruido,ifft_size,'symmetric'))';
+signal = ifftshift(ifft(s12_lab_10xemi,ifft_size,'symmetric'))';
+noise = ifftshift(ifft(noise_floor_10xemi,ifft_size,'symmetric'))';
 
 %% Step 2: filtering the signals
 
@@ -66,9 +61,6 @@ end
 
 % Obtaining the optimum parameters for the NLMS adaptive filter
 [optimum_stepsize,optimum_order] = pso_main(signal,noise);
-
-% optimum_stepsize=0.0456;
-% optimum_order=27;
 
 % Applying the adaptive filtering
 e1 = nlms_evaluation(signal,noise,optimum_order,optimum_stepsize); % Filtered signal in time domain
